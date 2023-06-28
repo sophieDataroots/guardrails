@@ -136,7 +136,7 @@ class Integer(ScalarType):
 
     def from_str(self, s: str) -> "Integer":
         """Create an Integer from a string."""
-        if s is None:
+        if s is None or s is "None" or s is "Null":
             return None
 
         return int(s)
@@ -148,7 +148,7 @@ class Float(ScalarType):
 
     def from_str(self, s: str) -> "Float":
         """Create a Float from a string."""
-        if s is None:
+        if s is None or s is "None" or s is "Null":
             return None
 
         return float(s)
@@ -160,7 +160,7 @@ class Boolean(ScalarType):
 
     def from_str(self, s: Union[str, bool]) -> "Boolean":
         """Create a Boolean from a string."""
-        if s is None:
+        if s is None or s is "None" or s is "Null":
             return None
 
         if isinstance(s, bool):
