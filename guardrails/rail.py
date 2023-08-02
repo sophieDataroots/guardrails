@@ -1,4 +1,5 @@
 """Rail class."""
+import warnings
 from dataclasses import dataclass, field
 from typing import List, Optional, Type
 
@@ -70,6 +71,9 @@ class Script:
             # If a string, wrap it in '' quotes.
             if isinstance(replacement, str):
                 replacement = f"'{replacement}'"
+            # Escape any double quotes.
+            replacement = str(replacement).replace('"', "&quot;")
+            # Replace the expression with the evaluated value.
             body = body.replace(f"{{{expr}}}", f"{{{replacement}}}")
 
         return body
@@ -158,8 +162,12 @@ class Rail:
         # Load <prompt />
         prompt = xml.find("prompt")
         if prompt is None:
-            raise ValueError("RAIL file must contain a prompt element.")
-        prompt = cls.load_prompt(prompt, output_schema)
+            warnings.warn(
+                "RAIL file must contain a prompt element. "
+                "Prompt must be provided during __call__."
+            )
+        else:
+            prompt = cls.load_prompt(prompt, output_schema)
 
         return cls(
             input_schema=input_schema,
