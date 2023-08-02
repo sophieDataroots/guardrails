@@ -158,6 +158,8 @@ class String(ScalarType):
 
     def from_str(self, s: str) -> "String":
         """Create a String from a string."""
+        if (s is None or (isinstance(s,str) and (s.strip() =="None" or s.strip()=="Null"))): 
+            return None
         return s
 
 
