@@ -3,6 +3,11 @@ from typing import Any, Dict, Optional
 
 import lxml.etree as ET
 
+def is_string_null_or_none(value):
+    if isinstance(value, str):
+        return value.strip().lower() in ("", "null", "none")
+    return False
+
 
 @dataclass
 class Placeholder:
@@ -14,7 +19,7 @@ class Placeholder:
         prune_extra_keys: bool,
         coerce_types: bool,
     ):
-        if self.optional and json_value is None:
+        if self.optional and (json_value is None or is_string_null_or_none(json_value)):
             return True
         return None
 
@@ -218,16 +223,23 @@ class ChoicePlaceholder(Placeholder):
             return False
 
         value_name = json_value[self.name]
+        super_result = super().verify(
+            value_name,
+            prune_extra_keys=prune_extra_keys,
+            coerce_types=coerce_types,
+        )
+        if super_result is not None:
+            return super_result 
         if value_name not in self.cases:
             return False
         if value_name not in json_value:
             return False
-        if any(
-            key in json_value and json_value[key] is not None
-            for key in self.cases.keys()
-            if key != value_name
-        ):
-            return False
+        # if any(
+        #     key in json_value and (json_value[key] is not None and not is_string_null_or_none(json_value[key]))
+        #     for key in self.cases.keys()
+        #     if key != value_name
+        # ):
+        #     return False
 
         value_schema = self.cases[value_name]
         value = json_value[value_name]
