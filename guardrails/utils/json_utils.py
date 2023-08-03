@@ -267,7 +267,7 @@ def generate_type_skeleton_from_schema(schema: ET._Element) -> DictPlaceholder:
     """Generate a JSON skeleton from an XML schema."""
 
     def _recurse_schema(schema):
-        is_optional = schema.attrib.get("required", "true") == "false"
+        is_optional = schema.attrib.get("required", "false") == "false"
         if schema.tag == "object":
             return DictPlaceholder(
                 children={
