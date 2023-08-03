@@ -97,7 +97,7 @@ class DictPlaceholder(Placeholder):
             coerce_types=coerce_types,
         )
         if super_result is not None:
-            return None
+            return super_result
 
         if not isinstance(json_value, dict):
             return False
@@ -167,7 +167,7 @@ class ListPlaceholder(Placeholder):
             coerce_types=coerce_types,
         )
         if super_result is not None:
-            return None
+            return super_result
 
         if not isinstance(json_value, list):
             return False
@@ -215,7 +215,7 @@ class ChoicePlaceholder(Placeholder):
             coerce_types=coerce_types,
         )
         if super_result is not None:
-            return None
+            return super_result
 
         if not isinstance(json_value, dict):
             return False
@@ -229,7 +229,7 @@ class ChoicePlaceholder(Placeholder):
             coerce_types=coerce_types,
         )
         if super_result is not None:
-            return None 
+            return super_result 
         if value_name not in self.cases:
             return False
         if value_name not in json_value:
